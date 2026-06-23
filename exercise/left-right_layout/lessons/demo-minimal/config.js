@@ -95,7 +95,7 @@ var DEMO_MINIMAL_CONFIG = {
           'A. 周长 = r × 2',
           'B. 周长 = 2πr',
           'C. 周长 = r + 2'
-        ], answer: 'B' }
+        ], answer: 'B', variant: 'paper', actions: ['reset', 'submit'], submitText: '提交', resetText: '重置', requiredText: '先选择一个答案' }
       ]
     },
     {
@@ -106,7 +106,7 @@ var DEMO_MINIMAL_CONFIG = {
           'A. 周长 = r × 2',
           'B. 周长 = 2πr',
           'C. 周长 = r + 2'
-        ] },
+        ], variant: 'paper' },
         { type: 'solveStep', index: 1, title: '写出公式', lines: ['圆的周长 = 2πr'] }
       ]
     },

@@ -18,6 +18,21 @@
 
 `AIClass_template/core` 是模板核心，写题时不要改。
 
+## 分层边界
+
+- `core/`：布局、重放、滚动、生命周期和交互门控，写题时不要改。
+- `widgets/`：把 `push` 配置适配成右侧内容；需要通用 UI 时调用 `AIClass_template/component`。
+- `component/`：提交按钮、选择题等可复用 UI 组件，不写 lesson、step 或题目业务逻辑。
+- `lessons/*/config.js`：只描述当前题目的内容、步骤、交互展示态和组件参数。
+
+例如选择题只在 `config.js` 写：
+
+```js
+{ type: 'choice', interactive: true, options: ['A. 30°', 'B. 60°'], answer: 'B' }
+```
+
+不要在单个 lesson 里手写选择题 DOM，也不要为了一个题目去改 `component/choice`。
+
 ## 布局参数
 
 大多数题目不需要传 layout，直接使用模板默认比例。确实需要调整时，只改这些字段：

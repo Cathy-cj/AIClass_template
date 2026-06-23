@@ -1,5 +1,5 @@
-// AIClass_template/index.js
-// Browser entry for the generic lesson template.
+// AIClass_template/exercise/left-right_layout/index.js
+// Browser entry for the left-right exercise layout.
 ;(function () {
   if (window.Lesson && window.Lesson.__aiClassTemplateVersion) return
 
@@ -7,6 +7,7 @@
   var base = script && script.src ? script.src.replace(/\/[^\/]*$/, '/') : './'
   var files = [
     'theme/grid-paper.css',
+    '../../component/index.js',
     'core/LayoutStage.js',
     'core/Frame.js',
     'figure/FigureHost.js',
