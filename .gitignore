@@ -2,3 +2,10 @@
 Thumbs.db
 *.log
 node_modules/
+.idea
+demo_html
+
+.claude
+CLAUDE.md
+docs
+

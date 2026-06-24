@@ -1,0 +1,320 @@
+/* AIClass reusable modal component */
+
+/* ─── Root: state machine via data-state ─── */
+
+.aic-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  pointer-events: none;
+  font-family: var(--lf-font, "Inter", "Microsoft YaHei", "PingFang SC", sans-serif);
+  color: var(--lf-ink, #0f172a);
+}
+
+.aic-modal,
+.aic-modal * {
+  box-sizing: border-box;
+}
+
+/* ─── Mask ─── */
+
+.aic-modal-mask {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: rgba(0, 0, 0, 0.32);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+[data-state="visible"] .aic-modal-mask {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ─── Float: vertical 3:7 strip on the right edge ─── */
+
+.aic-modal-float {
+  position: fixed;
+  right: 16px;
+  top: 25%;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 84px;
+  margin-top: -42px;
+  padding: 0;
+  border: none;
+  border-radius: 7px 5px 6px 5px / 5px 6px 5px 6px;
+  background: rgba(255, 254, 251, 0.98);
+  box-shadow:
+    1px 2px 0 rgba(15, 23, 42, 0.24),
+    0 0 0 2px var(--lf-ink, #0f172a);
+  transform: rotate(-0.35deg);
+  cursor: pointer;
+  pointer-events: auto;
+  outline: none;
+  opacity: 0;
+  transition:
+    opacity 0.3s ease,
+    box-shadow 0.18s ease,
+    transform 0.12s ease,
+    background 0.18s ease;
+}
+
+.aic-modal-float::before {
+  content: '';
+  position: absolute;
+  inset: -3px -4px -4px -3px;
+  border: 1px solid rgba(15, 23, 42, 0.38);
+  border-radius: 9px 6px 8px 7px / 7px 9px 6px 8px;
+  pointer-events: none;
+  transform: rotate(0.75deg);
+}
+
+.aic-modal-float::after {
+  content: '';
+  position: absolute;
+  inset: 1px 2px 2px 1px;
+  border: 1px dashed rgba(15, 23, 42, 0.12);
+  border-radius: 5px 4px 5px 4px / 4px 5px 4px 5px;
+  pointer-events: none;
+  transform: rotate(-0.5deg);
+}
+
+[data-state="float"] .aic-modal-float {
+  opacity: 1;
+}
+
+.aic-modal-float:hover {
+  background: #fff;
+  box-shadow:
+    2px 3px 0 rgba(15, 23, 42, 0.28),
+    0 0 0 2px var(--lf-ink, #0f172a);
+  transform: rotate(-0.35deg) translateY(-1px);
+}
+
+.aic-modal-float:active {
+  background: rgba(255, 254, 251, 0.92);
+  box-shadow:
+    1px 1px 0 rgba(15, 23, 42, 0.2),
+    0 0 0 2px var(--lf-ink, #0f172a);
+  transform: rotate(-0.35deg) translateY(1px);
+}
+
+.aic-modal-float:focus-visible {
+  box-shadow:
+    1px 2px 0 rgba(15, 23, 42, 0.24),
+    0 0 0 2px var(--lf-ink, #0f172a),
+    0 0 0 5px rgba(44, 116, 243, 0.14);
+}
+
+.aic-modal-float-icon {
+  writing-mode: vertical-rl;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  line-height: 1.4;
+  color: var(--lf-ink, #0f172a);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ─── Panel: 80% width overlay page ─── */
+
+.aic-modal-panel {
+  --aic-origin-x: 90vw;
+  --aic-origin-y: 25vh;
+  position: fixed;
+  z-index: 1;
+  top: 10vh;
+  left: 10vw;
+  width: 80vw;
+  max-height: 80vh;
+  border-radius: 12px;
+  background: var(--lf-paper, #fffefb);
+  box-shadow:
+    0 8px 32px rgba(15, 23, 42, 0.18),
+    0 0 0 1px rgba(15, 23, 42, 0.08);
+  opacity: 0;
+  transform: scale(0.15);
+  transform-origin: var(--aic-origin-x) var(--aic-origin-y);
+  pointer-events: none;
+  transition:
+    opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+[data-state="visible"] .aic-modal-panel {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+/* ─── Close button: floats on top of the panel ─── */
+
+.aic-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: none;
+  border-radius: 7px 5px 6px 5px / 5px 6px 5px 6px;
+  background: rgba(255, 254, 251, 0.98);
+  color: var(--lf-ink, #0f172a);
+  font-size: 22px;
+  font-weight: 400;
+  line-height: 1;
+  cursor: pointer;
+  outline: none;
+  box-shadow:
+    1px 2px 0 rgba(15, 23, 42, 0.24),
+    0 0 0 2px var(--lf-ink, #0f172a);
+  transform: rotate(-0.35deg);
+  transition:
+    box-shadow 0.18s ease,
+    transform 0.12s ease,
+    background 0.18s ease;
+}
+
+.aic-modal-close::before {
+  content: '';
+  position: absolute;
+  inset: -3px -4px -4px -3px;
+  border: 1px solid rgba(15, 23, 42, 0.38);
+  border-radius: 9px 6px 8px 7px / 7px 9px 6px 8px;
+  pointer-events: none;
+  transform: rotate(0.75deg);
+}
+
+.aic-modal-close:hover {
+  background: #fff;
+  box-shadow:
+    2px 3px 0 rgba(15, 23, 42, 0.28),
+    0 0 0 2px var(--lf-ink, #0f172a);
+  transform: rotate(-0.35deg) translateY(-1px);
+}
+
+.aic-modal-close:active {
+  background: rgba(255, 254, 251, 0.92);
+  box-shadow:
+    1px 1px 0 rgba(15, 23, 42, 0.2),
+    0 0 0 2px var(--lf-ink, #0f172a);
+  transform: rotate(-0.35deg) translateY(1px);
+}
+
+.aic-modal-close:focus-visible {
+  box-shadow:
+    1px 2px 0 rgba(15, 23, 42, 0.24),
+    0 0 0 2px var(--lf-ink, #0f172a),
+    0 0 0 5px rgba(44, 116, 243, 0.14);
+}
+
+/* ─── Panel Body: scrollable content area ─── */
+
+.aic-modal-body {
+  height: 80vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 24px 28px;
+  padding-top: 20px;
+  font-size: var(--lf-body-size, 24px);
+  line-height: var(--lf-line-height, 1.58);
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.aic-modal-body::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+/* ─── Body typography defaults ─── */
+
+.aic-modal-body h1,
+.aic-modal-body h2,
+.aic-modal-body h3 {
+  margin: 0 0 0.5em;
+  color: var(--lf-ink, #0f172a);
+  line-height: 1.22;
+}
+
+.aic-modal-body h1 {
+  font-size: calc(var(--lf-body-size, 24px) * 1.4);
+  font-weight: 800;
+}
+
+.aic-modal-body h2 {
+  font-size: calc(var(--lf-body-size, 24px) * 1.2);
+  font-weight: 800;
+}
+
+.aic-modal-body h3 {
+  font-size: var(--lf-body-size, 24px);
+  font-weight: 700;
+}
+
+.aic-modal-body p {
+  margin: 0 0 0.6em;
+}
+
+.aic-modal-body ul,
+.aic-modal-body ol {
+  margin: 0 0 0.6em;
+  padding-left: 1.6em;
+}
+
+.aic-modal-body li {
+  margin-bottom: 0.3em;
+}
+
+.aic-modal-body strong {
+  font-weight: 700;
+  color: var(--lf-ink, #0f172a);
+}
+
+.aic-modal-body em {
+  font-style: italic;
+}
+
+.aic-modal-body code {
+  padding: 2px 5px;
+  border-radius: 4px;
+  background: rgba(15, 23, 42, 0.06);
+  font-family: "SFMono-Regular", "Consolas", "Liberation Mono", monospace;
+  font-size: 0.9em;
+}
+
+.aic-modal-body hr {
+  margin: 1.2em 0;
+  border: none;
+  border-top: 1px solid rgba(178, 186, 200, 0.5);
+}
+
+.aic-modal-body table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 0 0.6em;
+}
+
+.aic-modal-body th,
+.aic-modal-body td {
+  padding: 6px 10px;
+  border: 1px solid rgba(178, 186, 200, 0.5);
+  text-align: left;
+}
+
+.aic-modal-body th {
+  background: rgba(15, 23, 42, 0.04);
+  font-weight: 700;
+}
