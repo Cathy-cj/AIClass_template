@@ -5,28 +5,27 @@
 
   var script = document.currentScript
   var base = script && script.src ? script.src.replace(/\/[^\/]*$/, '/') : './'
-  var shared = '../left-right_layout/'
   var files = [
     'theme/grid-paper.css',
     '../../component/index.js',
-    shared + 'core/LayoutStage.js',
+    'core/LayoutStage.js',
     'core/Frame.js',
-    shared + 'figure/FigureHost.js',
-    shared + 'core/replayAccumulate.js',
-    shared + 'core/Scroll.js',
-    shared + 'core/InteractionGate.js',
-    shared + 'widgets/registry.js',
-    shared + 'widgets/heading.js',
-    shared + 'widgets/text.js',
-    shared + 'widgets/oral.js',
-    shared + 'widgets/fill.js',
-    shared + 'widgets/choice.js',
-    shared + 'widgets/chain.js',
-    shared + 'widgets/phase.js',
-    shared + 'widgets/readList.js',
-    shared + 'widgets/solveStep.js',
-    shared + 'core/Runner.js',
-    shared + 'core/Lesson.js'
+    'figure/FigureHost.js',
+    'core/replayAccumulate.js',
+    'core/Scroll.js',
+    'core/InteractionGate.js',
+    'widgets/registry.js',
+    'widgets/heading.js',
+    'widgets/text.js',
+    'widgets/oral.js',
+    'widgets/fill.js',
+    'widgets/choice.js',
+    'widgets/chain.js',
+    'widgets/phase.js',
+    'widgets/readList.js',
+    'widgets/solveStep.js',
+    'core/Runner.js',
+    'core/Lesson.js'
   ]
 
   function writeAsset(path) {

@@ -20,9 +20,22 @@
 top-bottom_layout/
   index.js                 # 上下布局入口
   core/
+    LayoutStage.js         # 设计稿舞台、等比缩放、背景网格对齐
     Frame.js               # 纵向组装 top / figure / scroll
+    replayAccumulate.js    # go(n) 的 1..n 逻辑重放
+    Runner.js              # 对外 run/go 生命周期
+    Scroll.js              # 滚动到当前步骤
+    InteractionGate.js     # 仅当前步骤可交互
+    Lesson.js              # Lesson.create / bindBtns
+  figure/
+    FigureHost.js          # figure.mount / setState / reset 适配
+  widgets/
+    registry.js            # widget 注册和 mountAll
+    *.js                   # 下方做题区内容块
   theme/
     grid-paper.css         # 上下布局主题、横向图片区和做题区样式
+  schema/
+    lesson.schema.json     # config 约束
   docs/
     AUTHORING.md           # 写课规则
     WIDGET_CATALOG.md      # widget 参数说明
@@ -31,7 +44,7 @@ top-bottom_layout/
     demo-minimal/          # 横向示意图 demo
 ```
 
-`Runner`、`Scroll`、`InteractionGate`、`widgets` 等运行件先复用现有通用契约；本布局只重写和空间结构有关的 `Frame`、主题、文档与示例。
+`top-bottom_layout` 是完整独立的布局包，不依赖其他布局包的 core、figure 或 widgets。不同布局可以采用相同契约，但文件维护边界彼此独立。
 
 ## 核心约定
 
