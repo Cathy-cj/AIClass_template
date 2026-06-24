@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AIClass Text Only Demo</title>
+  <style>
+    body { margin: 0; width: 100vw; height: 100vh; overflow: hidden; background: #f1f5f9; }
+    #demo-toolbar {
+      position: fixed;
+      left: 50%;
+      bottom: 12px;
+      z-index: 9999;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.94);
+      box-shadow: 0 8px 28px rgba(15,23,42,0.14);
+      font-family: system-ui, sans-serif;
+    }
+    #demo-toolbar button {
+      min-width: 34px;
+      padding: 5px 9px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="demo-toolbar"></div>
+  <script src="../../index.js"></script>
+  <script src="./config.js"></script>
+  <script src="./play.js"></script>
+  <script>
+    var toolbar = document.getElementById('demo-toolbar')
+    for (var i = 1; i <= TEXT_ONLY_DEMO_CONFIG.steps.length; i++) {
+      ;(function (n) {
+        var b = document.createElement('button')
+        b.type = 'button'
+        b.textContent = String(n)
+        b.addEventListener('click', function () { textOnlyDemoLesson.go(n) })
+        toolbar.appendChild(b)
+      })(i)
+    }
+  </script>
+</body>
+</html>

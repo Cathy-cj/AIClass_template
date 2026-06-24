@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AIClass Text Only Lesson Config",
+  "type": "object",
+  "required": ["meta", "steps"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["id", "title"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "tag": { "type": "string" },
+        "question": { "type": "string" }
+      }
+    },
+    "layout": {
+      "type": "object",
+      "properties": {
+        "theme": { "type": "string" },
+        "designWidth": { "type": "number" },
+        "designHeight": { "type": "number" },
+        "left": { "oneOf": [{ "type": "number" }, { "type": "string" }] },
+        "top": { "oneOf": [{ "type": "number" }, { "type": "string" }] },
+        "width": { "oneOf": [{ "type": "number" }, { "type": "string" }] },
+        "height": { "oneOf": [{ "type": "number" }, { "type": "string" }] },
+        "edgePad": { "oneOf": [{ "type": "number" }, { "type": "string" }] },
+        "topPadding": { "type": "string" },
+        "scrollPadding": { "type": "string" },
+        "header": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "top": {
+      "type": "object",
+      "properties": {
+        "tag": { "type": "string" },
+        "title": { "type": "string" },
+        "lines": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "oneOf": [{ "type": "number" }, { "type": "string" }] },
+          "section": { "type": "object" },
+          "focus": { "type": "string" },
+          "push": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["type"],
+              "properties": {
+                "type": {
+                  "enum": ["heading", "section", "text", "oral", "fill", "choice", "chain", "phase", "readList", "solveStep"]
+                }
+              },
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": true
+}
