@@ -12,6 +12,10 @@
     var html = opts.html || ''
     var icon = opts.icon || '互动'
     var title = opts.title || ''
+    var designWidth = opts.designWidth || window.DESIGN_WIDTH || 1200
+    var designHeight = opts.designHeight || window.DESIGN_HEIGHT || 680
+    var panelWidth = opts.width || Math.round(designWidth * 0.8)
+    var panelHeight = opts.height || Math.round(designHeight * 0.8)
     var state = STATES.hidden
     var destroyed = false
 
@@ -55,9 +59,29 @@
 
     // ── State machine ──
 
+    function syncLayout() {
+      if (destroyed) return
+      var scale = Math.min(window.innerWidth / designWidth, window.innerHeight / designHeight)
+      var boardLeft = Math.round((window.innerWidth - designWidth * scale) / 2)
+      var boardTop = Math.round((window.innerHeight - designHeight * scale) / 2)
+      var panelLeft = boardLeft + Math.round((designWidth - panelWidth) / 2 * scale)
+      var panelTop = boardTop + Math.round((designHeight - panelHeight) / 2 * scale)
+      var floatLeft = boardLeft + Math.round((designWidth - 16 - 36) * scale)
+      var floatTop = boardTop + Math.round((designHeight * 0.25 - 42) * scale)
+
+      root.style.setProperty('--aic-board-scale', String(scale))
+      root.style.setProperty('--aic-panel-left', panelLeft + 'px')
+      root.style.setProperty('--aic-panel-top', panelTop + 'px')
+      root.style.setProperty('--aic-panel-width', panelWidth + 'px')
+      root.style.setProperty('--aic-panel-height', panelHeight + 'px')
+      root.style.setProperty('--aic-float-left', floatLeft + 'px')
+      root.style.setProperty('--aic-float-top', floatTop + 'px')
+    }
+
     function setState(next) {
       if (destroyed) return
       if (!STATES[next]) return
+      syncLayout()
       var prev = state
       state = next
       root.setAttribute('data-state', state)
@@ -106,6 +130,9 @@
       if (state === STATES.visible) collapse()
     })
 
+    window.addEventListener('resize', syncLayout)
+    syncLayout()
+
     // ── Public API ──
 
     return {
@@ -117,6 +144,7 @@
       setState: setState,
       getState: function () { return state },
       destroy: function () {
+        window.removeEventListener('resize', syncLayout)
         if (root.parentNode) root.parentNode.removeChild(root)
         destroyed = true
       }
