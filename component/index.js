@@ -15,7 +15,9 @@
     'shared/dom.js',
     'shared/option.js',
     'button/Button.js',
-    'choice/ChoiceQuestion.js'
+    'choice/ChoiceQuestion.js',
+    'modal/modal.css',
+    'modal/Modal.js'
   ]
 
   function writeAsset(path) {
