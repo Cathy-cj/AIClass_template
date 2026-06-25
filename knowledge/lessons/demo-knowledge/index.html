@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>知识点讲解 — 演示</title>
+  <style>
+    :root {
+      --lf-paper: #fffefb;
+      --lf-grid-unit: 20px;
+      --lf-grid-line: rgba(178, 186, 200, 0.18);
+      --lf-grid-line-bold: rgba(158, 168, 184, 0.25);
+      --lf-ink: #0f172a;
+      --lf-font: "Inter", "Microsoft YaHei", "PingFang SC", sans-serif;
+      --lf-body-size: 24px;
+      --lf-line-height: 1.58;
+      --lf-title-size: 36px;
+      --lf-gap: 32px;
+      --lf-edge-pad: 32px;
+      --lf-figure-width: 360px;
+      --lf-figure-max-width: 360px;
+      --lf-figure-svg-width: 300px;
+      --lf-blue: #2c74f3;
+      --lf-highlight: rgba(255, 214, 76, 0.34);
+      --lf-highlight-pink: rgba(255, 142, 178, 0.28);
+      --lf-highlight-mint: rgba(96, 210, 165, 0.28);
+      --lf-muted: #64748b;
+      --lf-block-gap: 16px;
+    }
+
+    body {
+      margin: 0;
+      background-color: var(--lf-paper);
+      background-image:
+        linear-gradient(var(--lf-grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--lf-grid-line) 1px, transparent 1px),
+        linear-gradient(var(--lf-grid-line-bold) 1px, transparent 1px),
+        linear-gradient(90deg, var(--lf-grid-line-bold) 1px, transparent 1px);
+      background-size:
+        var(--lf-grid-unit) var(--lf-grid-unit),
+        var(--lf-grid-unit) var(--lf-grid-unit),
+        calc(var(--lf-grid-unit) * 5) calc(var(--lf-grid-unit) * 5),
+        calc(var(--lf-grid-unit) * 5) calc(var(--lf-grid-unit) * 5);
+    }
+  </style>
+
+  <!-- component/ (shared) -->
+  <link rel="stylesheet" href="../../../component/button/button.css">
+  <link rel="stylesheet" href="../../../component/choice/choice.css">
+  <script src="../../../component/shared/dom.js"></script>
+  <script src="../../../component/shared/option.js"></script>
+  <script src="../../../component/button/Button.js"></script>
+  <script src="../../../component/choice/ChoiceQuestion.js"></script>
+
+  <!-- lib/ (local copies from left-right_layout) -->
+  <script src="../../lib/core/LayoutStage.js"></script>
+  <script src="../../lib/replay/replayAccumulate.js"></script>
+  <script src="../../lib/figure/FigureHost.js"></script>
+  <script src="../../lib/widgets/registry.js"></script>
+  <script src="../../lib/widgets/heading.js"></script>
+  <script src="../../lib/widgets/text.js"></script>
+  <script src="../../lib/widgets/oral.js"></script>
+  <script src="../../lib/widgets/fill.js"></script>
+  <script src="../../lib/widgets/choice.js"></script>
+  <script src="../../lib/widgets/chain.js"></script>
+  <script src="../../lib/widgets/phase.js"></script>
+  <script src="../../lib/widgets/readList.js"></script>
+  <script src="../../lib/widgets/solveStep.js"></script>
+
+  <!-- knowledge/ -->
+  <link rel="stylesheet" href="../../theme/knowledge.css">
+  <script src="../../core/DebugPanel.js"></script>
+  <script src="../../core/PageScroll.js"></script>
+  <script src="../../core/PageReplay.js"></script>
+  <script src="../../core/PageContainer.js"></script>
+  <script src="../../core/KnowledgeRunner.js"></script>
+  <script src="../../core/Knowledge.js"></script>
+</head>
+<body>
+  <script src="figure.js"></script>
+  <script src="config.js"></script>
+  <script src="play.js"></script>
+</body>
+</html>
