@@ -3,7 +3,6 @@ var TOP_BOTTOM_DEMO_CONFIG = {
   meta: {
     id: 'top-bottom-demo',
     title: '上下布局最小演示',
-    tag: 'Demo',
     question: '验证横向示意图 + 下方做题区域'
   },
   layout: {
@@ -13,7 +12,6 @@ var TOP_BOTTOM_DEMO_CONFIG = {
     scrollPadding: '8px 36px 160px'
   },
   top: {
-    tag: '行程问题',
     title: '甲、乙两车从 A、B 两地同时出发，相向而行。',
     lines: ['观察横向路线图，先找速度和，再列相遇关系。']
   },
@@ -27,7 +25,7 @@ var TOP_BOTTOM_DEMO_CONFIG = {
   steps: [
     {
       id: 1,
-      section: { tag: '读图', title: '横向路线图' },
+      section: { title: '读图：横向路线图' },
       figure: { state: 'route' },
       push: [
         { type: 'text', lines: ['这类图横向很长，适合放在题目下方整行展示。'] }

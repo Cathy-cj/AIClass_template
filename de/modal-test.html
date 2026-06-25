@@ -38,6 +38,16 @@
     }
     h1 { font-size: 32px; font-weight: 800; margin: 0 0 16px; }
     p { margin: 0 0 12px; }
+    .lesson-stage {
+      max-width: 900px;
+      padding: 28px 32px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.54);
+      box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.08);
+    }
+    .lesson-stage strong {
+      color: var(--lf-ink);
+    }
     .controls {
       display: flex;
       gap: 12px;
@@ -69,8 +79,12 @@
   </style>
 </head>
 <body>
-  <h1>Modal 组件测试</h1>
-  <p>测试弹窗组件的三态切换：hidden → float → visible → float → hidden</p>
+  <div class="lesson-stage">
+    <h1>排列组合：密码锁问题</h1>
+    <p>我们正在讲解“一个位置有几种选择，多个位置就按位置依次相乘”的思路。</p>
+    <p>在进入三位数密码锁之前，先停一下，让学生口答一个更小的问题，确认他们理解“一位密码”的选择数。</p>
+    <p><strong>弹窗定位：</strong>它不是跳出课堂的新模块，而是讲解中的短暂停顿和互动确认。</p>
+  </div>
 
   <div class="controls">
     <button id="btn-show">show() — 出现悬浮框</button>
@@ -95,22 +109,25 @@
     }
 
     var modal = AIClassComponent.createModal({
+      title: '口答互动',
+      icon: '口答',
+      width: 500,
+      height: 620,
+      x: 660,
+      y: 30,
+      minScale: 0.78,
+      maxScale: 1.04,
       html: ''
-        + '<h2>圆的认识</h2>'
-        + '<p>圆是平面上到一个定点距离等于定长的所有点组成的图形。这个定点叫做<strong>圆心</strong>，定长叫做<strong>半径</strong>。</p>'
-        + '<hr>'
-        + '<h3>关键概念</h3>'
-        + '<ul>'
-        + '  <li><strong>半径（r）</strong>：圆心到圆上任意一点的线段</li>'
-        + '  <li><strong>直径（d）</strong>：经过圆心且两端都在圆上的线段，d = 2r</li>'
-        + '  <li><strong>周长（C）</strong>：圆的周长公式 C = 2πr</li>'
-        + '  <li><strong>面积（S）</strong>：圆的面积公式 S = πr²</li>'
-        + '</ul>'
-        + '<hr>'
-        + '<h3>例题</h3>'
-        + '<p>已知一个圆的半径 r = 5cm，求它的直径和周长。</p>'
-        + '<p>解：直径 d = 2r = 2 × 5 = <strong>10cm</strong></p>'
-        + '<p>周长 C = 2πr = 2 × 3.14 × 5 = <strong>31.4cm</strong></p>',
+        + '<section class="aic-interaction-card">'
+        + '  <div class="aic-interaction-kicker">互动题 · 口答</div>'
+        + '  <p class="aic-interaction-question">为了解决这个问题，我们先来思考一个更简单的问题：如果我的密码锁只有一位数，并且密码是 1、2、3、4、5 中的一个数字，那么我能设置多少种不同的密码？</p>'
+        + '  <div class="aic-interaction-answer">'
+        + '    <div class="aic-interaction-input">学生口答：5</div>'
+        + '    <button class="aic-interaction-submit" type="button">判定</button>'
+        + '  </div>'
+        + '  <div class="aic-interaction-feedback"><strong>正确反馈：</strong>很好！一位数密码只有 1 个位置，这个位置可以放 1、2、3、4、5 中的任意一个数字，所以一共有 5 种可能。</div>'
+        + '  <div class="aic-interaction-history"><strong>历史记录：</strong>一位数密码有 5 种选法。</div>'
+        + '</section>',
       onShow: function () { log('🟢 onShow — 弹窗展开') },
       onHide: function () { log('🔴 onHide — 弹窗关闭') },
       onClose: function () { log('🟡 onClose — 关闭按钮点击') }

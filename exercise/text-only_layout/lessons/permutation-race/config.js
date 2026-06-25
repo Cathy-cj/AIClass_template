@@ -45,14 +45,12 @@
     meta: {
       id: 'permutation-race',
       title: '排列问题：运动会前三名',
-      tag: '排列',
       question: '不考虑并列名次，一共有多少种不同的前三名结果？'
     },
     layout: {
       theme: 'grid-paper'
     },
     top: {
-      tag: '排列问题',
       title: '学校运动会 100 米比赛共有 8 名同学参加。比赛结束后，要决出第 1 名、第 2 名、第 3 名。',
       lines: ['如果不考虑并列名次，一共有多少种不同的前三名结果？']
     },
@@ -73,7 +71,7 @@
     steps: [
       {
         id: 1,
-        section: { tag: '第一步', title: '找出总对象数' },
+        section: { title: '第一步：找出总对象数' },
         push: [
           {
             type: 'clickText',
@@ -103,7 +101,7 @@
       },
       {
         id: 2,
-        section: { tag: '第二步', title: '确定要选出几个' },
+        section: { title: '第二步：确定要选出几个' },
         push: [
           { type: 'text', lines: ['很好！这道题一共有 8 名同学参加比赛，所以我们一共有 8 个对象可以选择。这里的对象就是参加比赛的同学。'] },
           {
@@ -125,13 +123,12 @@
       },
       {
         id: 3,
-        section: { tag: '第三步', title: '判断是不是排列问题' },
+        section: { title: '第三步：判断是不是排列问题' },
         push: [
           { type: 'text', lines: ['很好！第 1 名、第 2 名、第 3 名一共有 3 个名次，所以需要选出 3 名同学来排列。'] },
           {
             type: 'oralInput',
             interactive: true,
-            badge: '说一说',
             question: '这道题是不是排列问题？为什么？',
             placeholder: '可以从“是否有顺序”“名次变化结果是否变化”来说明。',
             rows: 3,
@@ -148,7 +145,7 @@
       },
       {
         id: 4,
-        section: { tag: '第四步', title: '写出排列符号' },
+        section: { title: '第四步：写出排列符号' },
         push: [
           { type: 'text', lines: ['这道题是排列问题，因为前三名有明确顺序，同样三名同学如果名次不同，结果也不同。'] },
           {
@@ -170,13 +167,12 @@
       },
       {
         id: 5,
-        section: { tag: '第五步', title: '计算排列数并得到答案' },
+        section: { title: '第五步：计算排列数并得到答案' },
         push: [
           { type: 'text', lines: ['很好！这道题可以写成 8A3，表示从 8 名同学中选出 3 名来排列。'] },
           {
             type: 'oralInput',
             interactive: true,
-            badge: '口答',
             question: '请你计算出一共有多少种排列方式：8A3 =',
             placeholder: '例如：8A3=8×7×6=336',
             rows: 3,

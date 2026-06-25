@@ -13,7 +13,7 @@
 
     var enabled = AIClassInteractionGate.isInteractive(block, runtime)
     var oralInput = window.AIClassComponent.createOralInput({
-      badge: block.badge || '说一说',
+      badge: '说一说',
       question: block.question || block.text,
       placeholder: block.placeholder,
       rows: block.rows,

@@ -3,21 +3,19 @@ var TEXT_ONLY_DEMO_CONFIG = {
   meta: {
     id: 'text-only-demo',
     title: '纯文字布局最小演示',
-    tag: 'Demo',
     question: '验证固定题目区 + 下方整体滚动做题区'
   },
   layout: {
     theme: 'grid-paper'
   },
   top: {
-    tag: '应用题',
     title: '学校买来 36 本书，平均分给 4 个小组，每组分几本？',
     lines: ['先读清楚已知条件，再选择关系并列式计算。']
   },
   steps: [
     {
       id: 1,
-      section: { tag: '读题', title: '理解题意' },
+      section: { title: '读题：理解题意' },
       push: [
         { type: 'text', lines: ['这是一道平均分问题，顶部题目固定，下方步骤内容会整体滚动。'] }
       ]

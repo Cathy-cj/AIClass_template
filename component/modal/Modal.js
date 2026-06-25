@@ -16,6 +16,11 @@
     var designHeight = opts.designHeight || window.DESIGN_HEIGHT || 680
     var panelWidth = opts.width || Math.round(designWidth * 0.8)
     var panelHeight = opts.height || Math.round(designHeight * 0.8)
+    var panelX = typeof opts.x === 'number' ? opts.x : Math.round((designWidth - panelWidth) / 2)
+    var panelY = typeof opts.y === 'number' ? opts.y : Math.round((designHeight - panelHeight) / 2)
+    var panelScale = typeof opts.scale === 'number' ? opts.scale : 1
+    var minScale = typeof opts.minScale === 'number' ? opts.minScale : 0.72
+    var maxScale = typeof opts.maxScale === 'number' ? opts.maxScale : 1.28
     var state = STATES.hidden
     var destroyed = false
 
@@ -47,9 +52,19 @@
     var body = dom.create('div', { className: 'aic-modal-body' })
     if (html) body.innerHTML = html
 
+    var resizeHandle = dom.create('div', {
+      className: 'aic-modal-resize',
+      attributes: {
+        role: 'button',
+        tabindex: '0',
+        'aria-label': '缩放弹窗'
+      }
+    })
+
     var panel = dom.create('div', { className: 'aic-modal-panel' })
     panel.appendChild(closeBtn)
     panel.appendChild(body)
+    panel.appendChild(resizeHandle)
 
     var root = dom.create('div', { className: 'aic-modal' })
     root.setAttribute('data-state', state)
@@ -64,8 +79,8 @@
       var scale = Math.min(window.innerWidth / designWidth, window.innerHeight / designHeight)
       var boardLeft = Math.round((window.innerWidth - designWidth * scale) / 2)
       var boardTop = Math.round((window.innerHeight - designHeight * scale) / 2)
-      var panelLeft = boardLeft + Math.round((designWidth - panelWidth) / 2 * scale)
-      var panelTop = boardTop + Math.round((designHeight - panelHeight) / 2 * scale)
+      var panelLeft = boardLeft + Math.round(panelX * scale)
+      var panelTop = boardTop + Math.round(panelY * scale)
       var floatLeft = boardLeft + Math.round((designWidth - 16 - 36) * scale)
       var floatTop = boardTop + Math.round((designHeight * 0.25 - 42) * scale)
 
@@ -74,8 +89,33 @@
       root.style.setProperty('--aic-panel-top', panelTop + 'px')
       root.style.setProperty('--aic-panel-width', panelWidth + 'px')
       root.style.setProperty('--aic-panel-height', panelHeight + 'px')
+      root.style.setProperty('--aic-panel-scale', String(panelScale))
       root.style.setProperty('--aic-float-left', floatLeft + 'px')
       root.style.setProperty('--aic-float-top', floatTop + 'px')
+    }
+
+    function clampScale(value) {
+      var verticalMaxScale = panelHeight > 0 ? (designHeight - panelY) / panelHeight : maxScale
+      var effectiveMaxScale = Math.min(maxScale, verticalMaxScale)
+      return Math.max(minScale, Math.min(effectiveMaxScale, value))
+    }
+
+    function setPanelScale(nextScale) {
+      if (destroyed) return
+      panelScale = clampScale(nextScale)
+      root.style.setProperty('--aic-panel-scale', String(panelScale))
+    }
+
+    function movePanel(nextX, nextY) {
+      if (destroyed) return
+      panelX = nextX
+      panelY = nextY
+      syncLayout()
+    }
+
+    function shouldSkipDrag(target) {
+      if (!target || !target.closest) return false
+      return !!target.closest('.aic-modal-close, .aic-modal-resize, button, a, input, textarea, select, [data-no-drag]')
     }
 
     function setState(next) {
@@ -130,6 +170,62 @@
       if (state === STATES.visible) collapse()
     })
 
+    resizeHandle.addEventListener('pointerdown', function (e) {
+      if (state !== STATES.visible) return
+      e.preventDefault()
+      e.stopPropagation()
+      var startX = e.clientX
+      var startY = e.clientY
+      var startScale = panelScale
+      var boardScale = parseFloat(root.style.getPropertyValue('--aic-board-scale')) || 1
+
+      function onMove(moveEvent) {
+        var deltaX = moveEvent.clientX - startX
+        var deltaY = moveEvent.clientY - startY
+        var deltaScale = Math.max(deltaX / (panelWidth * boardScale), deltaY / (panelHeight * boardScale))
+        setPanelScale(startScale + deltaScale)
+      }
+
+      function onUp() {
+        window.removeEventListener('pointermove', onMove)
+        window.removeEventListener('pointerup', onUp)
+        window.removeEventListener('pointercancel', onUp)
+      }
+
+      window.addEventListener('pointermove', onMove)
+      window.addEventListener('pointerup', onUp)
+      window.addEventListener('pointercancel', onUp)
+    })
+
+    panel.addEventListener('pointerdown', function (e) {
+      if (state !== STATES.visible) return
+      if (shouldSkipDrag(e.target)) return
+      e.preventDefault()
+      var startX = e.clientX
+      var startY = e.clientY
+      var startPanelX = panelX
+      var startPanelY = panelY
+      var boardScale = parseFloat(root.style.getPropertyValue('--aic-board-scale')) || 1
+      root.setAttribute('data-dragging', 'true')
+
+      function onMove(moveEvent) {
+        var deltaX = (moveEvent.clientX - startX) / boardScale
+        var deltaY = (moveEvent.clientY - startY) / boardScale
+        movePanel(startPanelX + deltaX, startPanelY + deltaY)
+      }
+
+      function onUp() {
+        root.removeAttribute('data-dragging')
+        window.removeEventListener('pointermove', onMove)
+        window.removeEventListener('pointerup', onUp)
+        window.removeEventListener('pointercancel', onUp)
+      }
+
+      window.addEventListener('pointermove', onMove)
+      window.addEventListener('pointerup', onUp)
+      window.addEventListener('pointercancel', onUp)
+    })
+
     window.addEventListener('resize', syncLayout)
     syncLayout()
 
@@ -142,7 +238,10 @@
       expand: expand,
       collapse: collapse,
       setState: setState,
+      setScale: setPanelScale,
+      moveTo: movePanel,
       getState: function () { return state },
+      getScale: function () { return panelScale },
       destroy: function () {
         window.removeEventListener('resize', syncLayout)
         if (root.parentNode) root.parentNode.removeChild(root)

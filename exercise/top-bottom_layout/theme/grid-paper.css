@@ -105,9 +105,6 @@
   min-width: 0;
 }
 
-.lf-header-tag,
-.lf-top-tag,
-.lf-section-tag,
 .lf-oral-badge {
   flex-shrink: 0;
   display: inline-flex;
@@ -142,13 +139,6 @@
   flex: 0 0 auto;
   padding: var(--lf-top-padding);
   color: var(--lf-ink);
-}
-
-.lf-top-tag {
-  min-height: 24px;
-  padding: 2px 9px;
-  background: rgba(255, 142, 178, 0.18);
-  color: #c45c7a;
 }
 
 .lf-top-title {
@@ -215,10 +205,16 @@
 .lf-solve-title {
   display: inline-block;
   margin: 0;
-  padding: 0 2px;
+  padding: 0;
   color: var(--lf-ink);
   line-height: 1.18;
-  background: var(--lf-highlight-pink);
+  background: transparent;
+}
+
+.lf-heading-title,
+.lf-section-title {
+  padding: 0 4px;
+  background: rgba(255, 142, 178, 0.2);
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
@@ -232,12 +228,6 @@
 
 .lf-section {
   margin-top: 2px;
-}
-
-.lf-section-tag {
-  margin-right: 10px;
-  background: rgba(255, 142, 178, 0.18);
-  color: #c45c7a;
 }
 
 .lf-text-line,
@@ -304,24 +294,6 @@
   opacity: 1;
   background: var(--lf-highlight);
   border-bottom-color: transparent;
-}
-
-.lf-submit {
-  margin-left: 12px;
-  padding: 5px 14px;
-  border: 2px solid var(--lf-ink);
-  border-radius: 9px;
-  background: #fff;
-  color: var(--lf-ink);
-  font: inherit;
-  font-size: 18px;
-  cursor: pointer;
-  box-shadow: 2px 3px 0 rgba(15, 23, 42, 0.22);
-}
-
-.lf-submit:disabled {
-  cursor: default;
-  opacity: 0.45;
 }
 
 .lf-chain {

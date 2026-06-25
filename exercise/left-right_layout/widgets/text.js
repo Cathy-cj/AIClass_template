@@ -14,12 +14,6 @@
 
   AIClassWidgetRegistry.register('section', function (el, block) {
     el.classList.add('lf-section')
-    if (block.tag) {
-      var tag = document.createElement('span')
-      tag.className = 'lf-section-tag'
-      tag.textContent = block.tag
-      el.appendChild(tag)
-    }
     var title = document.createElement('span')
     title.className = 'lf-section-title'
     title.textContent = block.title || block.text || ''
