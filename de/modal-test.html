@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modal 组件测试</title>
+  <script src="../component/index.js"></script>
+  <style>
+    :root {
+      --lf-paper: #fffefb;
+      --lf-grid-unit: 20px;
+      --lf-grid-line: rgba(178, 186, 200, 0.42);
+      --lf-grid-line-bold: rgba(158, 168, 184, 0.58);
+      --lf-ink: #0f172a;
+      --lf-font: "Inter", "Microsoft YaHei", "PingFang SC", sans-serif;
+      --lf-body-size: 24px;
+      --lf-line-height: 1.58;
+    }
+
+    body {
+      margin: 0;
+      padding: 40px;
+      font-family: var(--lf-font);
+      font-size: var(--lf-body-size);
+      line-height: var(--lf-line-height);
+      color: var(--lf-ink);
+      background-color: var(--lf-paper);
+      background-image:
+        linear-gradient(var(--lf-grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--lf-grid-line) 1px, transparent 1px),
+        linear-gradient(var(--lf-grid-line-bold) 1px, transparent 1px),
+        linear-gradient(90deg, var(--lf-grid-line-bold) 1px, transparent 1px);
+      background-size:
+        var(--lf-grid-unit) var(--lf-grid-unit),
+        var(--lf-grid-unit) var(--lf-grid-unit),
+        calc(var(--lf-grid-unit) * 5) calc(var(--lf-grid-unit) * 5),
+        calc(var(--lf-grid-unit) * 5) calc(var(--lf-grid-unit) * 5);
+    }
+    h1 { font-size: 32px; font-weight: 800; margin: 0 0 16px; }
+    p { margin: 0 0 12px; }
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin: 24px 0;
+    }
+    .controls button {
+      padding: 8px 18px;
+      border: 2px solid #0f172a;
+      border-radius: 8px;
+      background: #fff;
+      font-size: 18px;
+      cursor: pointer;
+      box-shadow: 2px 3px 0 rgba(15,23,42,0.22);
+    }
+    .controls button:hover { background: #f8f8f6; }
+    .log {
+      margin-top: 24px;
+      padding: 16px;
+      border: 1px dashed rgba(178,186,200,0.6);
+      border-radius: 8px;
+      background: rgba(15,23,42,0.02);
+      font-size: 16px;
+      line-height: 1.6;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+    .log-entry { margin: 2px 0; }
+    .log-entry .time { color: #64748b; }
+  </style>
+</head>
+<body>
+  <h1>Modal 组件测试</h1>
+  <p>测试弹窗组件的三态切换：hidden → float → visible → float → hidden</p>
+
+  <div class="controls">
+    <button id="btn-show">show() — 出现悬浮框</button>
+    <button id="btn-expand">expand() — 直接展开</button>
+    <button id="btn-hide">hide() — 隐藏</button>
+    <button id="btn-destroy">destroy() — 销毁</button>
+  </div>
+
+  <div class="log" id="log"></div>
+
+  <script>
+    var logEl = document.getElementById('log')
+    function log(msg) {
+      var entry = document.createElement('div')
+      entry.className = 'log-entry'
+      var now = new Date()
+      var time = [now.getHours(), now.getMinutes(), now.getSeconds()]
+        .map(function (n) { return n < 10 ? '0' + n : n }).join(':')
+      entry.innerHTML = '<span class="time">[' + time + ']</span> ' + msg
+      logEl.appendChild(entry)
+      logEl.scrollTop = logEl.scrollHeight
+    }
+
+    var modal = AIClassComponent.createModal({
+      html: ''
+        + '<h2>圆的认识</h2>'
+        + '<p>圆是平面上到一个定点距离等于定长的所有点组成的图形。这个定点叫做<strong>圆心</strong>，定长叫做<strong>半径</strong>。</p>'
+        + '<hr>'
+        + '<h3>关键概念</h3>'
+        + '<ul>'
+        + '  <li><strong>半径（r）</strong>：圆心到圆上任意一点的线段</li>'
+        + '  <li><strong>直径（d）</strong>：经过圆心且两端都在圆上的线段，d = 2r</li>'
+        + '  <li><strong>周长（C）</strong>：圆的周长公式 C = 2πr</li>'
+        + '  <li><strong>面积（S）</strong>：圆的面积公式 S = πr²</li>'
+        + '</ul>'
+        + '<hr>'
+        + '<h3>例题</h3>'
+        + '<p>已知一个圆的半径 r = 5cm，求它的直径和周长。</p>'
+        + '<p>解：直径 d = 2r = 2 × 5 = <strong>10cm</strong></p>'
+        + '<p>周长 C = 2πr = 2 × 3.14 × 5 = <strong>31.4cm</strong></p>',
+      onShow: function () { log('🟢 onShow — 弹窗展开') },
+      onHide: function () { log('🔴 onHide — 弹窗关闭') },
+      onClose: function () { log('🟡 onClose — 关闭按钮点击') }
+    })
+
+    document.body.appendChild(modal.el)
+    log('组件已创建，初始状态：' + modal.getState())
+
+    document.getElementById('btn-show').addEventListener('click', function () {
+      modal.show()
+      log('调用 show() → 状态：' + modal.getState())
+    })
+
+    document.getElementById('btn-expand').addEventListener('click', function () {
+      modal.expand()
+      log('调用 expand() → 状态：' + modal.getState())
+    })
+
+    document.getElementById('btn-hide').addEventListener('click', function () {
+      modal.hide()
+      log('调用 hide() → 状态：' + modal.getState())
+    })
+
+    document.getElementById('btn-destroy').addEventListener('click', function () {
+      modal.destroy()
+      log('调用 destroy() — 组件已销毁')
+    })
+
+    log('请点击上方按钮或右侧悬浮图标测试')
+  </script>
+</body>
+</html>

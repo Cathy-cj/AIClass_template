@@ -10,7 +10,6 @@ var DEMO_MINIMAL_CONFIG = {
     theme: 'grid-paper'
   },
   top: {
-    tag: '演示题',
     title: '已知半径 r，观察圆中的半径、直径与周长。已知半径 r，观察圆中的半径、直径与周长',
     lines: [
       '顶部题干区高度不固定，会根据文字多少自动撑开。',

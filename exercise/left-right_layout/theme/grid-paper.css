@@ -1,10 +1,18 @@
 /* AIClass_template grid-paper theme */
 
+@font-face {
+  font-family: "ChenDaiMingYingBi";
+  src: url("../../../assets/fonts/ChenDaiMingYingBiUnicode.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --lf-paper: #fffefb;
   --lf-grid-unit: 20px;
-  --lf-grid-line: rgba(178, 186, 200, 0.42);
-  --lf-grid-line-bold: rgba(158, 168, 184, 0.58);
+  --lf-grid-line: rgba(208, 212, 219, 0.19);
+  --lf-grid-line-bold: rgba(192, 198, 207, 0.27);
   --lf-ink: #0f172a;
   --lf-muted: #64748b;
   --lf-blue: #2c74f3;
@@ -14,7 +22,7 @@
   --lf-highlight: rgba(255, 214, 76, 0.34);
   --lf-highlight-pink: rgba(255, 142, 178, 0.28);
   --lf-highlight-mint: rgba(96, 210, 165, 0.28);
-  --lf-font: "Inter", "Microsoft YaHei", "PingFang SC", sans-serif;
+  --lf-font: "ChenDaiMingYingBi", "Inter", "Microsoft YaHei", "PingFang SC", sans-serif;
   --lf-figure-width: 360px;
   --lf-figure-max-width: 360px;
   --lf-figure-svg-width: 300px;
@@ -56,8 +64,8 @@
   background-image:
     linear-gradient(var(--lf-grid-line) 1px, transparent 1px),
     linear-gradient(90deg, var(--lf-grid-line) 1px, transparent 1px),
-    linear-gradient(var(--lf-grid-line-bold) 1px, transparent 1px),
-    linear-gradient(90deg, var(--lf-grid-line-bold) 1px, transparent 1px);
+    linear-gradient(var(--lf-grid-line-bold) 0.75px, transparent 0.75px),
+    linear-gradient(90deg, var(--lf-grid-line-bold) 0.75px, transparent 0.75px);
   background-size:
     var(--lf-grid-unit) var(--lf-grid-unit),
     var(--lf-grid-unit) var(--lf-grid-unit),

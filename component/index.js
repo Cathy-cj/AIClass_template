@@ -12,10 +12,16 @@
   var files = [
     'button/button.css',
     'choice/choice.css',
+    'click-text/click-text.css',
+    'drag-permutation/drag-permutation.css',
+    'oral-input/oral-input.css',
     'shared/dom.js',
     'shared/option.js',
     'button/Button.js',
     'choice/ChoiceQuestion.js',
+    'click-text/ClickText.js',
+    'drag-permutation/DragPermutation.js',
+    'oral-input/OralInput.js',
     'modal/modal.css',
     'modal/Modal.js'
   ]

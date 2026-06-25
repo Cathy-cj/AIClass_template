@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>排列问题：运动会前三名</title>
+  <style>
+    body { margin: 0; width: 100vw; height: 100vh; overflow: hidden; background: #f1f5f9; }
+    #demo-toolbar {
+      position: fixed;
+      left: 50%;
+      bottom: 12px;
+      z-index: 9999;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.94);
+      box-shadow: 0 8px 28px rgba(15,23,42,0.14);
+      font-family: system-ui, sans-serif;
+    }
+    #demo-toolbar button {
+      min-width: 34px;
+      padding: 5px 9px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+    }
+    #demo-toast {
+      position: fixed;
+      left: 50%;
+      bottom: 66px;
+      z-index: 9999;
+      max-width: min(720px, calc(100vw - 32px));
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.92);
+      color: #fff;
+      font: 15px/1.45 system-ui, sans-serif;
+      box-shadow: 0 10px 30px rgba(15,23,42,0.18);
+      opacity: 0;
+      transform: translate(-50%, 8px);
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+    #demo-toast.is-visible {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+  </style>
+</head>
+<body>
+  <div id="demo-toolbar"></div>
+  <div id="demo-toast"></div>
+  <script src="../../index.js"></script>
+  <script src="./config.js"></script>
+  <script src="./play.js"></script>
+  <script>
+    ;(function () {
+      var toastEl = document.getElementById('demo-toast')
+      var timer = null
+      window.toast = {
+        show: function (message) {
+          toastEl.textContent = message || ''
+          toastEl.classList.add('is-visible')
+          clearTimeout(timer)
+          timer = setTimeout(function () {
+            toastEl.classList.remove('is-visible')
+          }, 2600)
+        }
+      }
+
+      var toolbar = document.getElementById('demo-toolbar')
+      for (var i = 1; i <= PERMUTATION_RACE_CONFIG.steps.length; i++) {
+        ;(function (n) {
+          var b = document.createElement('button')
+          b.type = 'button'
+          b.textContent = String(n)
+          b.addEventListener('click', function () { permutationRaceLesson.go(n) })
+          toolbar.appendChild(b)
+        })(i)
+      }
+    })()
+  </script>
+</body>
+</html>
