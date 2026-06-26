@@ -33,97 +33,7 @@
   pointer-events: auto;
 }
 
-/* ─── Float: vertical 3:7 strip on the right edge ─── */
-
-.aic-modal-float {
-  position: fixed;
-  left: var(--aic-float-left, calc(100vw - 52px));
-  top: var(--aic-float-top, calc(25vh - 42px));
-  z-index: 2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 84px;
-  margin-top: 0;
-  padding: 0;
-  border: none;
-  border-radius: 999px;
-  background: rgba(255, 254, 251, 0.9);
-  box-shadow:
-    0 8px 22px rgba(15, 23, 42, 0.12),
-    0 0 0 1px rgba(15, 23, 42, 0.14);
-  transform: scale(var(--aic-board-scale, 1));
-  transform-origin: top left;
-  cursor: pointer;
-  pointer-events: auto;
-  outline: none;
-  opacity: 0;
-  transition:
-    opacity 0.3s ease,
-    box-shadow 0.18s ease,
-    transform 0.12s ease,
-    background 0.18s ease;
-}
-
-.aic-modal-float::before {
-  content: '';
-  position: absolute;
-  inset: 7px 6px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.04), transparent 54%);
-  pointer-events: none;
-}
-
-.aic-modal-float::after {
-  content: '';
-  position: absolute;
-  inset: -5px;
-  border: 1px solid rgba(15, 23, 42, 0.12);
-  border-radius: 999px;
-  pointer-events: none;
-}
-
-[data-state="float"] .aic-modal-float {
-  opacity: 1;
-}
-
-.aic-modal-float:hover {
-  background: rgba(255, 254, 251, 0.96);
-  box-shadow:
-    0 10px 24px rgba(15, 23, 42, 0.14),
-    0 0 0 1px rgba(15, 23, 42, 0.2);
-  transform: scale(var(--aic-board-scale, 1)) translateY(-1px);
-}
-
-.aic-modal-float:active {
-  background: rgba(248, 246, 240, 0.96);
-  box-shadow:
-    0 6px 16px rgba(15, 23, 42, 0.12),
-    0 0 0 1px rgba(15, 23, 42, 0.18);
-  transform: scale(var(--aic-board-scale, 1)) translateY(1px);
-}
-
-.aic-modal-float:focus-visible {
-  box-shadow:
-    0 14px 30px rgba(15, 23, 42, 0.24),
-    0 0 0 1px rgba(255, 255, 255, 0.34) inset,
-    0 0 0 5px rgba(15, 23, 42, 0.12);
-}
-
-.aic-modal-float-icon {
-  writing-mode: vertical-rl;
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  line-height: 1.4;
-  color: rgba(15, 23, 42, 0.74);
-  text-shadow: none;
-  pointer-events: none;
-  user-select: none;
-}
-
-/* ─── Panel: 80% width overlay page ─── */
+/* ─── Panel ─── */
 
 .aic-modal-panel {
   position: fixed;
@@ -177,7 +87,7 @@
   transition: none;
 }
 
-/* ─── Close button: floats on top of the panel ─── */
+/* ─── Close button ─── */
 
 .aic-modal-close {
   position: absolute;
@@ -400,7 +310,7 @@
 }
 
 .aic-interaction-question::before {
-  content: '题目';
+  content: attr(data-question-label);
   display: flex;
   align-items: center;
   width: fit-content;
@@ -437,9 +347,16 @@
   border-radius: 10px;
   background: rgba(255, 254, 251, 0.94);
   color: rgba(15, 23, 42, 0.68);
+  font: inherit;
   font-size: 20px;
   font-weight: 700;
   box-shadow: none;
+  outline: none;
+}
+
+.aic-interaction-input:focus {
+  border-color: rgba(15, 23, 42, 0.28);
+  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.06);
 }
 
 .aic-interaction-submit {
@@ -470,6 +387,16 @@
   color: rgba(15, 23, 42, 0.82);
   font-size: 18px;
   line-height: 1.55;
+}
+
+.aic-interaction-feedback.is-correct {
+  border-left-color: rgba(46, 125, 50, 0.42);
+  background: rgba(246, 252, 246, 0.72);
+}
+
+.aic-interaction-feedback.is-wrong {
+  border-left-color: rgba(180, 83, 9, 0.42);
+  background: rgba(255, 250, 240, 0.72);
 }
 
 .aic-interaction-history {

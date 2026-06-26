@@ -179,6 +179,83 @@
   font-weight: 700;
 }
 
+.kn-topic .kn-interactive-task {
+  display: inline-flex;
+  align-items: center;
+}
+
+.kn-topic .kn-interactive-task-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 8px 18px 8px 20px;
+  border: 1.5px solid rgba(54, 83, 122, 0.38);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(232, 239, 248, 0.9)),
+    rgba(44, 116, 243, 0.08);
+  color: #17345f;
+  font: inherit;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.2;
+  cursor: pointer;
+  box-shadow:
+    0 10px 22px rgba(26, 55, 96, 0.14),
+    0 0 18px rgba(44, 116, 243, 0.1),
+    0 0 0 1px rgba(54, 83, 122, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.62) inset,
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition:
+    background 0.16s ease,
+    box-shadow 0.16s ease,
+    transform 0.12s ease;
+}
+
+.kn-topic .kn-interactive-task-button::before {
+  content: '';
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  background: #2c74f3;
+  box-shadow: 0 0 0 4px rgba(44, 116, 243, 0.12);
+}
+
+.kn-topic .kn-interactive-task-button::after {
+  content: '›';
+  margin-left: 2px;
+  color: rgba(23, 52, 95, 0.82);
+  font-size: 24px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.kn-topic .kn-interactive-task-button:hover {
+  border-color: rgba(44, 116, 243, 0.58);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(221, 234, 252, 0.96)),
+    rgba(44, 116, 243, 0.12);
+  box-shadow:
+    0 13px 26px rgba(26, 55, 96, 0.17),
+    0 0 22px rgba(44, 116, 243, 0.14),
+    0 0 0 1px rgba(54, 83, 122, 0.13),
+    0 0 0 1px rgba(255, 255, 255, 0.66) inset,
+    inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  transform: translateY(-1px);
+}
+
+.kn-topic .kn-interactive-task-button:active {
+  box-shadow:
+    0 6px 14px rgba(26, 55, 96, 0.11),
+    0 0 10px rgba(44, 116, 243, 0.08),
+    0 0 0 1px rgba(54, 83, 122, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.5) inset,
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  transform: translateY(1px);
+}
+
 .kn-topic .lf-fill-line {
   display: inline-flex;
   flex-wrap: wrap;

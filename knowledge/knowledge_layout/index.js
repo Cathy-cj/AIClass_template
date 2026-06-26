@@ -1,4 +1,4 @@
-// AIClass_template/exercise/knowledge/index.js
+// AIClass_template/knowledge/knowledge_layout/index.js
 // Browser entry for the knowledge module.
 ;(function () {
   if (window.Knowledge && window.Knowledge.__aiClassKnowledgeVersion) return
@@ -7,12 +7,14 @@
   var base = script && script.src ? script.src.replace(/\/[^\/]*$/, '/') : './'
   var files = [
     'theme/knowledge.css',
-    'component/button/button.css',
-    'component/choice/choice.css',
-    'component/shared/dom.js',
-    'component/shared/option.js',
-    'component/button/Button.js',
-    'component/choice/ChoiceQuestion.js',
+    '../interactive_task/modal.css',
+    '../../component/button/button.css',
+    '../../component/choice/choice.css',
+    '../../component/shared/dom.js',
+    '../../component/shared/option.js',
+    '../../component/button/Button.js',
+    '../../component/choice/ChoiceQuestion.js',
+    '../interactive_task/Modal.js',
     'lib/core/LayoutStage.js',
     'lib/replay/replayAccumulate.js',
     'lib/figure/FigureHost.js',
@@ -20,13 +22,14 @@
     'lib/widgets/heading.js',
     'lib/widgets/text.js',
     'lib/widgets/oral.js',
+    'lib/widgets/interactiveTask.js',
     'lib/widgets/fill.js',
     'lib/widgets/choice.js',
     'lib/widgets/chain.js',
     'lib/widgets/phase.js',
     'lib/widgets/readList.js',
     'lib/widgets/solveStep.js',
-    'component/debug-panel/DebugPanel.js',
+    'core/DebugPanel.js',
     'core/PageScroll.js',
     'core/PageReplay.js',
     'core/PageContainer.js',

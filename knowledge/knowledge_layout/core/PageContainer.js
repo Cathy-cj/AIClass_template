@@ -8,6 +8,18 @@
     this.figureHost = null
     this.replay = new AIClassKnowledgePageReplay(this.config)
     this.currentStepId = null
+    this._disposers = []
+  }
+
+  PageContainer.prototype._cleanupBlocks = function () {
+    this._disposers.forEach(function (dispose) {
+      try {
+        dispose()
+      } catch (e) {
+        console.warn('[KnowledgePageContainer] block cleanup failed:', e)
+      }
+    })
+    this._disposers = []
   }
 
   PageContainer.prototype.render = function () {
@@ -55,11 +67,16 @@
     if (!acc) return
 
     // Clear and replay
+    this._cleanupBlocks()
     this._scrollEl.innerHTML = ''
+    var self = this
     var fragment = AIClassWidgetRegistry.mountAll(acc.blocks, {
       config: this.config,
       instant: false,
-      runner: null
+      runner: null,
+      registerCleanup: function (dispose) {
+        if (typeof dispose === 'function') self._disposers.push(dispose)
+      }
     })
     this._scrollEl.appendChild(fragment)
 
@@ -78,6 +95,7 @@
   }
 
   PageContainer.prototype.teardown = function () {
+    this._cleanupBlocks()
     if (this.figureHost) this.figureHost.teardown()
     if (this.topicEl && this.topicEl.parentNode) {
       this.topicEl.parentNode.removeChild(this.topicEl)

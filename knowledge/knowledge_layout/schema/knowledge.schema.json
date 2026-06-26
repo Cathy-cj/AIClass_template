@@ -47,8 +47,23 @@
                     "required": ["type"],
                     "properties": {
                       "type": {
-                        "enum": ["heading", "section", "text", "oral", "fill", "choice", "chain", "phase", "readList", "solveStep"]
-                      }
+                        "enum": ["heading", "section", "text", "oral", "interactiveTask", "fill", "choice", "chain", "phase", "readList", "solveStep"]
+                      },
+                      "id": { "oneOf": [{ "type": "number" }, { "type": "string" }] },
+                      "buttonText": { "type": "string" },
+                      "badge": { "type": "string" },
+                      "modal": {
+                        "type": "object",
+                        "properties": {
+                          "title": { "type": "string" },
+                          "width": { "type": "number" },
+                          "height": { "oneOf": [{ "type": "number" }, { "const": "fill" }] },
+                          "x": { "type": "number" },
+                          "y": { "type": "number" },
+                          "maxScale": { "type": "number" }
+                        }
+                      },
+                      "task": { "type": "object" }
                     }
                   }
                 }

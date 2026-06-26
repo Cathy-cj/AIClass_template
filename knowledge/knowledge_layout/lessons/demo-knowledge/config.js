@@ -14,6 +14,27 @@ var DEMO_KNOWLEDGE_CONFIG = {
           push: [
             { type: 'heading', text: '什么是圆' },
             { type: 'text', lines: ['圆是平面上到一个定点距离等于定长的所有点组成的图形。'] },
+            {
+              type: 'interactiveTask',
+              id: 'circle-basic-oral-1',
+              buttonText: '互动题',
+              badge: '口答',
+              modal: {
+                title: '互动题 · 口答',
+                width: 500,
+                x: 660,
+                y: 30
+              },
+              task: {
+                type: 'oral',
+                question: '圆是由满足什么条件的点组成的图形？',
+                answer: ['到一个定点距离等于定长', '到定点距离等于定长'],
+                placeholder: '请输入口答要点',
+                correctFeedback: '很好！关键是“到一个定点的距离等于定长”。',
+                wrongHint: '再想一想：定义里强调的是点到圆心的距离有什么共同特点？',
+                history: '圆上的点到圆心的距离都等于半径。'
+              }
+            },
             { type: 'text', lines: ['这个定点叫做圆心，定长叫做半径。'] }
           ]
         },

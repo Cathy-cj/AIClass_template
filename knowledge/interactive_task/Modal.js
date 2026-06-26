@@ -1,26 +1,27 @@
-// AIClass_template/component/modal/Modal.js
+// AIClass_template/knowledge/interactive_task/Modal.js
 ;(function () {
   var ns = window.AIClassComponent = window.AIClassComponent || {}
   var dom = ns._dom
 
   if (!dom) throw new Error('[AIClassComponent.Modal] shared/dom.js is required')
 
-  var STATES = { hidden: 'hidden', float: 'float', visible: 'visible' }
+  var STATES = { hidden: 'hidden', visible: 'visible' }
 
   function createModal(opts) {
     opts = opts || {}
     var html = opts.html || ''
-    var icon = opts.icon || '互动'
     var title = opts.title || ''
     var designWidth = opts.designWidth || window.DESIGN_WIDTH || 1200
     var designHeight = opts.designHeight || window.DESIGN_HEIGHT || 680
     var panelWidth = opts.width || Math.round(designWidth * 0.8)
-    var panelHeight = opts.height || Math.round(designHeight * 0.8)
+    var fillHeight = opts.fillHeight === true || opts.height === 'fill'
+    var panelHeight = typeof opts.height === 'number' ? opts.height : Math.round(designHeight * 0.8)
     var panelX = typeof opts.x === 'number' ? opts.x : Math.round((designWidth - panelWidth) / 2)
     var panelY = typeof opts.y === 'number' ? opts.y : Math.round((designHeight - panelHeight) / 2)
-    var minScale = typeof opts.minScale === 'number' ? opts.minScale : 0.72
+    if (fillHeight) panelHeight = Math.max(1, designHeight - panelY)
     var maxScale = typeof opts.maxScale === 'number' ? opts.maxScale : 1.28
     var panelScale = 1
+    var panelScaleReady = false
     var state = STATES.hidden
     var destroyed = false
 
@@ -31,16 +32,6 @@
     // ── Build DOM ──
 
     var mask = dom.create('div', { className: 'aic-modal-mask' })
-
-    var floatBtn = dom.create('div', {
-      className: 'aic-modal-float',
-      attributes: {
-        role: 'button',
-        tabindex: '0',
-        'aria-label': title || '打开弹窗'
-      }
-    })
-    floatBtn.appendChild(dom.create('span', { className: 'aic-modal-float-icon', text: icon }))
 
     var closeBtn = dom.create('button', {
       className: 'aic-modal-close',
@@ -59,22 +50,15 @@
     var root = dom.create('div', { className: 'aic-modal' })
     root.setAttribute('data-state', state)
     root.appendChild(mask)
-    root.appendChild(floatBtn)
     root.appendChild(panel)
 
     // ── State machine ──
 
-    function getMaxScaleForPosition() {
+    function getInitialScale() {
       var horizontalMaxScale = panelWidth > 0 ? (designWidth - panelX) / panelWidth : maxScale
       var verticalMaxScale = panelHeight > 0 ? (designHeight - panelY) / panelHeight : maxScale
-      return Math.min(maxScale, horizontalMaxScale, verticalMaxScale)
-    }
-
-    function getAutoScale() {
-      var fitScale = getMaxScaleForPosition()
-      if (fitScale <= 0) return 0.12
-      if (fitScale < minScale) return fitScale
-      return Math.max(minScale, fitScale)
+      var fitScale = Math.min(maxScale, horizontalMaxScale, verticalMaxScale)
+      return fitScale > 0 ? fitScale : 0.12
     }
 
     function syncLayout() {
@@ -84,24 +68,27 @@
       var boardTop = Math.round((window.innerHeight - designHeight * scale) / 2)
       var panelLeft = boardLeft + Math.round(panelX * scale)
       var panelTop = boardTop + Math.round(panelY * scale)
-      var floatLeft = boardLeft + Math.round((designWidth - 16 - 36) * scale)
-      var floatTop = boardTop + Math.round((designHeight * 0.25 - 42) * scale)
 
-      panelScale = getAutoScale()
+      if (!panelScaleReady) {
+        panelScale = getInitialScale()
+        panelScaleReady = true
+      }
       root.style.setProperty('--aic-board-scale', String(scale))
       root.style.setProperty('--aic-panel-left', panelLeft + 'px')
       root.style.setProperty('--aic-panel-top', panelTop + 'px')
       root.style.setProperty('--aic-panel-width', panelWidth + 'px')
       root.style.setProperty('--aic-panel-height', panelHeight + 'px')
       root.style.setProperty('--aic-panel-scale', String(panelScale))
-      root.style.setProperty('--aic-float-left', floatLeft + 'px')
-      root.style.setProperty('--aic-float-top', floatTop + 'px')
     }
 
     function movePanel(nextX, nextY) {
       if (destroyed) return
-      panelX = nextX
-      panelY = nextY
+      var scaledWidth = panelWidth * panelScale
+      var scaledHeight = panelHeight * panelScale
+      var maxX = Math.max(0, designWidth - scaledWidth)
+      var maxY = Math.max(0, designHeight - scaledHeight)
+      panelX = Math.max(0, Math.min(maxX, nextX))
+      panelY = Math.max(0, Math.min(maxY, nextY))
       syncLayout()
     }
 
@@ -124,42 +111,16 @@
       }
     }
 
-    function show() { setState(STATES.float) }
     function hide() { setState(STATES.hidden) }
 
-    function syncOrigin() {
-      var rect = floatBtn.getBoundingClientRect()
-      var cx = rect.left + rect.width / 2
-      var cy = rect.top + rect.height / 2
-      panel.style.setProperty('--aic-origin-x', cx + 'px')
-      panel.style.setProperty('--aic-origin-y', cy + 'px')
-    }
-
     function expand() {
-      syncOrigin()
       setState(STATES.visible)
-    }
-
-    function collapse() {
-      syncOrigin()
-      setState(STATES.float)
     }
 
     // ── Events ──
 
-    floatBtn.addEventListener('click', function () {
-      if (state === STATES.float) expand()
-    })
-
-    floatBtn.addEventListener('keydown', function (e) {
-      if ((e.key === 'Enter' || e.key === ' ') && state === STATES.float) {
-        e.preventDefault()
-        expand()
-      }
-    })
-
     closeBtn.addEventListener('click', function () {
-      if (state === STATES.visible) collapse()
+      if (state === STATES.visible) hide()
     })
 
     panel.addEventListener('pointerdown', function (e) {
@@ -198,10 +159,10 @@
 
     return {
       el: root,
-      show: show,
+      show: expand,
       hide: hide,
       expand: expand,
-      collapse: collapse,
+      collapse: hide,
       setState: setState,
       moveTo: movePanel,
       getState: function () { return state },
