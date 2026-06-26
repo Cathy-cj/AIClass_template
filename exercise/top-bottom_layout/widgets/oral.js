@@ -6,7 +6,7 @@
 
     var badge = document.createElement('span')
     badge.className = 'lf-oral-badge'
-    badge.textContent = block.badge || '说一说'
+    badge.textContent = '说一说'
     wrap.appendChild(badge)
 
     var question = document.createElement('span')

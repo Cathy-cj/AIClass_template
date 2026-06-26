@@ -100,12 +100,6 @@
     if (this.layout.header !== true) return
     var row = document.createElement('div')
     row.className = 'lf-header-row'
-    if (meta.tag) {
-      var tag = document.createElement('span')
-      tag.className = 'lf-header-tag'
-      tag.textContent = meta.tag
-      row.appendChild(tag)
-    }
     var title = document.createElement('div')
     title.className = 'lf-header-title'
     title.textContent = meta.title || ''
@@ -129,14 +123,6 @@
     this.top.classList.remove('is-hidden')
 
     var head = null
-    if (topConfig.tag) {
-      head = head || document.createElement('div')
-      head.className = 'lf-top-head'
-      var tag = document.createElement('span')
-      tag.className = 'lf-top-tag'
-      tag.textContent = topConfig.tag
-      head.appendChild(tag)
-    }
     if (topConfig.title) {
       head = head || document.createElement('div')
       head.className = 'lf-top-head'

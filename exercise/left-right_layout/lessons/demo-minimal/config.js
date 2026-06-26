@@ -3,14 +3,12 @@ var DEMO_MINIMAL_CONFIG = {
   meta: {
     id: 'demo-minimal',
     title: '通用模板最小演示',
-    tag: 'Demo',
     question: '验证 go(n) 跳步、回退、重复点击都能正常显示'
   },
   layout: {
     theme: 'grid-paper'
   },
   top: {
-    tag: '演示题',
     title: '已知半径 r，观察圆中的半径、直径与周长。已知半径 r，观察圆中的半径、直径与周长',
     lines: [
       '顶部题干区高度不固定，会根据文字多少自动撑开。',
@@ -28,7 +26,7 @@ var DEMO_MINIMAL_CONFIG = {
   steps: [
     {
       id: 1,
-      section: { tag: '模板验证', title: '圆的基础图形' },
+      section: { title: '模板验证：圆的基础图形' },
       figure: { state: 'circle' },
       push: [
         { type: 'text', lines: ['左侧图槽只负责画图，右侧内容只负责文字和交互。'] }
@@ -39,7 +37,7 @@ var DEMO_MINIMAL_CONFIG = {
       figure: { state: 'circle-radius', params: { label: 'r' } },
       push: [
         { type: 'text', lines: ['现在在圆上画一条半径 r。'] },
-        { type: 'oral', badge: '说一说', question: '半径是从哪里到哪里？' }
+        { type: 'oral', question: '半径是从哪里到哪里？' }
       ],
       focus: 'figure'
     },
@@ -47,7 +45,7 @@ var DEMO_MINIMAL_CONFIG = {
       id: 3,
       figure: { state: 'circle-diameter' },
       push: [
-        { type: 'chain', nodes: ['半径 r', '直径 2r'], prompt: '直径和半径有什么关系？' }
+        { type: 'chain', nodes: ['半径 r', { text: '直径 2r', highlight: true }], prompt: '直径和半径有什么关系？' }
       ]
     },
     {
@@ -73,7 +71,7 @@ var DEMO_MINIMAL_CONFIG = {
     },
     {
       id: 6,
-      section: { tag: '解题型', title: '审题与关系链' },
+      section: { title: '解题型：审题与关系链' },
       figure: { state: 'circle-perimeter' },
       push: [
         { type: 'phase', name: 'read', title: '审题' },
@@ -85,7 +83,7 @@ var DEMO_MINIMAL_CONFIG = {
       id: 7,
       push: [
         { type: 'phase', name: 'think', title: '找关系' },
-        { type: 'chain', nodes: ['半径 r', '直径 2r', '圆周长'], prompt: '知道半径后，先找到直径，再想周长公式。' }
+        { type: 'chain', nodes: ['半径 r', { text: '直径 2r', highlight: true }, { text: '圆周长', highlight: true }], prompt: '知道半径后，先找到直径，再想周长公式。' }
       ]
     },
     {

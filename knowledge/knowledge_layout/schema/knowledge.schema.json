@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AIClass Knowledge Config",
+  "type": "object",
+  "required": ["meta", "topics"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["id", "title"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "tag": { "type": "string" }
+      }
+    },
+    "topics": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "layout", "steps"],
+        "properties": {
+          "id": { "oneOf": [{ "type": "number" }, { "type": "string" }] },
+          "title": { "type": "string" },
+          "subtitle": { "type": "string" },
+          "tag": { "type": "string" },
+          "layout": { "enum": ["figure-text", "text-only"] },
+          "figure": {},
+          "figureStates": { "type": "object" },
+          "steps": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["id"],
+              "properties": {
+                "id": { "oneOf": [{ "type": "number" }, { "type": "string" }] },
+                "figure": {
+                  "type": "object",
+                  "properties": {
+                    "state": { "type": "string" },
+                    "params": { "type": "object" }
+                  }
+                },
+                "push": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["type"],
+                    "properties": {
+                      "type": {
+                        "enum": ["heading", "section", "text", "oral", "interactiveTask", "fill", "choice", "chain", "phase", "readList", "solveStep"]
+                      },
+                      "id": { "oneOf": [{ "type": "number" }, { "type": "string" }] },
+                      "buttonText": { "type": "string" },
+                      "badge": { "type": "string" },
+                      "modal": {
+                        "type": "object",
+                        "properties": {
+                          "title": { "type": "string" },
+                          "width": { "type": "number" },
+                          "height": { "oneOf": [{ "type": "number" }, { "const": "fill" }] },
+                          "x": { "type": "number" },
+                          "y": { "type": "number" },
+                          "maxScale": { "type": "number" }
+                        }
+                      },
+                      "task": { "type": "object" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

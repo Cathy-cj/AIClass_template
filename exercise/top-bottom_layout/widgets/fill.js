@@ -35,17 +35,19 @@
 
     var enabled = AIClassInteractionGate.isInteractive(block, runtime)
     if (enabled) {
-      var btn = document.createElement('button')
-      btn.type = 'button'
-      btn.className = 'lf-submit'
-      btn.textContent = block.submitText || '提交'
-      btn.addEventListener('click', function () {
-        var values = inputs.map(function (input) { return input.value.trim() })
-        if (block.required !== false && values.some(function (v) { return !v })) {
-          if (window.toast && typeof window.toast.show === 'function') window.toast.show('请填写答案')
-          return
+      if (!window.AIClassComponent || typeof window.AIClassComponent.createSubmitButton !== 'function') {
+        throw new Error('[fill widget] AIClassComponent.createSubmitButton is required')
+      }
+      var btn = window.AIClassComponent.createSubmitButton({
+        text: block.submitText || '提交',
+        onClick: function () {
+          var values = inputs.map(function (input) { return input.value.trim() })
+          if (block.required !== false && values.some(function (v) { return !v })) {
+            if (window.toast && typeof window.toast.show === 'function') window.toast.show('请填写答案')
+            return
+          }
+          AIClassInteractionGate.submit('fill', values.length === 1 ? values[0] : values, block, ctx.config)
         }
-        AIClassInteractionGate.submit('fill', values.length === 1 ? values[0] : values, block, ctx.config)
       })
       row.appendChild(btn)
       setTimeout(function () {
