@@ -15,7 +15,7 @@
       display: flex;\
       flex-direction: column;\
       gap: 8px;\
-      min-width: 200px;\
+      min-width: 220px;\
       user-select: none;\
     }\
     .kn-debug-row {\
@@ -33,6 +33,10 @@
       font-weight: 700;\
       font-size: 15px;\
     }\
+    .kn-debug-progress {\
+      color: #64748b;\
+      font-size: 12px;\
+    }\
     .kn-debug-btns {\
       display: flex;\
       gap: 6px;\
@@ -45,14 +49,16 @@
       padding: 6px 14px;\
       font: 600 13px/1 inherit;\
       cursor: pointer;\
-      transition: background 0.15s;\
+      transition: background 0.15s, opacity 0.15s;\
+    }\
+    .kn-debug-btn:disabled {\
+      opacity: 0.35;\
+      cursor: not-allowed;\
     }\
     .kn-debug-btn--prev { background: #334155; color: #e2e8f0; }\
-    .kn-debug-btn--prev:hover { background: #475569; }\
+    .kn-debug-btn--prev:hover:not(:disabled) { background: #475569; }\
     .kn-debug-btn--next { background: #2563eb; color: #fff; }\
-    .kn-debug-btn--next:hover { background: #1d4ed8; }\
-    .kn-debug-btn--topic { background: #7c3aed; color: #fff; }\
-    .kn-debug-btn--topic:hover { background: #6d28d9; }\
+    .kn-debug-btn--next:hover:not(:disabled) { background: #1d4ed8; }\
   '
 
   function injectStyle() {
@@ -74,6 +80,10 @@
     this.el = null
     this.topicValue = null
     this.stepValue = null
+    this.progressValue = null
+    this.prevBtn = null
+    this.nextBtn = null
+    this.flatIndex = -1
 
     injectStyle()
     this._render()
@@ -108,29 +118,32 @@
     stepRow.appendChild(this.stepValue)
     el.appendChild(stepRow)
 
+    // Progress row
+    var progressRow = document.createElement('div')
+    progressRow.className = 'kn-debug-row'
+    this.progressValue = document.createElement('span')
+    this.progressValue.className = 'kn-debug-progress'
+    progressRow.appendChild(this.progressValue)
+    el.appendChild(progressRow)
+
     // Buttons
     var btns = document.createElement('div')
     btns.className = 'kn-debug-btns'
 
-    var prevBtn = document.createElement('button')
-    prevBtn.className = 'kn-debug-btn kn-debug-btn--prev'
-    prevBtn.textContent = '← 上一步'
     var self = this
-    prevBtn.addEventListener('click', function () { self._prev() })
 
-    var nextStepBtn = document.createElement('button')
-    nextStepBtn.className = 'kn-debug-btn kn-debug-btn--next'
-    nextStepBtn.textContent = '下一步 →'
-    nextStepBtn.addEventListener('click', function () { self._nextStep() })
+    this.prevBtn = document.createElement('button')
+    this.prevBtn.className = 'kn-debug-btn kn-debug-btn--prev'
+    this.prevBtn.textContent = '← 上一步'
+    this.prevBtn.addEventListener('click', function () { self._prev() })
 
-    var nextTopicBtn = document.createElement('button')
-    nextTopicBtn.className = 'kn-debug-btn kn-debug-btn--topic'
-    nextTopicBtn.textContent = '新主题 ▸'
-    nextTopicBtn.addEventListener('click', function () { self._nextTopic() })
+    this.nextBtn = document.createElement('button')
+    this.nextBtn.className = 'kn-debug-btn kn-debug-btn--next'
+    this.nextBtn.textContent = '下一步 →'
+    this.nextBtn.addEventListener('click', function () { self._next() })
 
-    btns.appendChild(prevBtn)
-    btns.appendChild(nextStepBtn)
-    btns.appendChild(nextTopicBtn)
+    btns.appendChild(this.prevBtn)
+    btns.appendChild(this.nextBtn)
     el.appendChild(btns)
 
     document.body.appendChild(el)
@@ -138,28 +151,47 @@
   }
 
   DebugPanel.prototype._update = function () {
-    var cur = this.runner.current()
-    if (cur) {
-      this.topicValue.textContent = cur.topic
-      this.stepValue.textContent = cur.step || '—'
-    } else {
+    var all = this.runner.linearSteps()
+    var total = all.length
+
+    if (this.flatIndex < 0 || this.flatIndex >= total) {
       this.topicValue.textContent = '—'
       this.stepValue.textContent = '—'
+      this.progressValue.textContent = '0 / ' + total
+      this.prevBtn.disabled = true
+      this.nextBtn.disabled = total === 0
+      return
     }
+
+    var cur = all[this.flatIndex]
+    this.topicValue.textContent = cur.topicId
+    this.stepValue.textContent = cur.stepId
+    this.progressValue.textContent = (this.flatIndex + 1) + ' / ' + total
+
+    this.prevBtn.disabled = this.flatIndex <= 0
+    this.nextBtn.disabled = this.flatIndex >= total - 1
   }
 
-  DebugPanel.prototype._nextTopic = function () {
-    this.runner.next()
-    this._update()
-  }
+  DebugPanel.prototype._next = function () {
+    var all = this.runner.linearSteps()
+    if (this.flatIndex >= all.length - 1) return
 
-  DebugPanel.prototype._nextStep = function () {
-    this.runner.nextStep()
+    var nextIndex = this.flatIndex + 1
+    var result = this.runner.goToLinear(nextIndex)
+    if (result) {
+      this.flatIndex = nextIndex
+    }
     this._update()
   }
 
   DebugPanel.prototype._prev = function () {
-    this.runner.prevStep()
+    if (this.flatIndex <= 0) return
+
+    var prevIndex = this.flatIndex - 1
+    var result = this.runner.goToLinear(prevIndex)
+    if (result) {
+      this.flatIndex = prevIndex
+    }
     this._update()
   }
 

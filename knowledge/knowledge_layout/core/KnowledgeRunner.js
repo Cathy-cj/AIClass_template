@@ -13,6 +13,8 @@
     this.headerEl = null
     this.resizeHandler = null
     this._topicIndex = null
+    this._linearIndex = -1
+    this._linearSteps = null
   }
 
   KnowledgeRunner.prototype.mount = function () {
@@ -103,6 +105,78 @@
     })
   }
 
+  // ─── Linear step list ───
+
+  KnowledgeRunner.prototype.linearSteps = function () {
+    if (this._linearSteps) return this._linearSteps
+    var result = []
+    for (var i = 0; i < this.topics.length; i++) {
+      var container = this.topicContainers[i]
+      var steps = container.replay.steps()
+      for (var j = 0; j < steps.length; j++) {
+        result.push({
+          topicIndex: i,
+          topicId: this.topics[i].id,
+          stepId: steps[j].id,
+          stepIndex: j,
+          totalSteps: steps.length
+        })
+      }
+    }
+    this._linearSteps = result
+    return result
+  }
+
+  // ─── Idempotent linear navigation ───
+
+  KnowledgeRunner.prototype.goToLinear = function (flatIndex) {
+    var all = this.linearSteps()
+    if (flatIndex < 0 || flatIndex >= all.length) return null
+
+    var target = all[flatIndex]
+
+    // 1. Topics AFTER target: hide them, reset their step state
+    for (var i = target.topicIndex + 1; i < this.topics.length; i++) {
+      var c = this.topicContainers[i]
+      if (c.topicEl) c.topicEl.setAttribute('data-hidden', '')
+      c.currentStepId = null
+    }
+
+    // 2. Topics BEFORE target: reveal and advance to their last step
+    for (var i = 0; i < target.topicIndex; i++) {
+      var c = this.topicContainers[i]
+      if (c.topicEl) c.topicEl.removeAttribute('data-hidden')
+      var steps = c.replay.steps()
+      if (steps.length > 0) {
+        var lastStepId = steps[steps.length - 1].id
+        // Skip if already at the correct step
+        if (c.currentStepId !== lastStepId) {
+          try { c.go(lastStepId) } catch (e) { /* skip */ }
+        }
+      }
+    }
+
+    // 3. Target topic: reveal and go to target step
+    var tc = this.topicContainers[target.topicIndex]
+    if (tc.topicEl) tc.topicEl.removeAttribute('data-hidden')
+    // Skip if already at the correct step
+    if (tc.currentStepId !== target.stepId) {
+      try { tc.go(target.stepId) } catch (e) { /* skip */ }
+    }
+
+    // 4. Update runner state
+    this.revealedCount = target.topicIndex + 1
+    this.currentTopicIndex = target.topicIndex
+    this._linearIndex = flatIndex
+
+    // 5. Scroll to target topic
+    this._deferScrollTo(tc.topicEl)
+
+    return { topic: target.topicId, step: target.stepId, flatIndex: flatIndex }
+  }
+
+  // ─── Legacy API (kept for backward compatibility) ───
+
   KnowledgeRunner.prototype.next = function () {
     var nextIndex = this.revealedCount
     if (nextIndex >= this.topics.length) return null
@@ -164,8 +238,22 @@
     if (currentStepId == null) return null
 
     var currentIndex = container.replay.indexOfStep(currentStepId)
-    if (currentIndex <= 0) return null
-    return this.go(steps[currentIndex - 1].id)
+    if (currentIndex > 0) {
+      return this.go(steps[currentIndex - 1].id)
+    }
+
+    // At first step of current topic, go to previous topic's last step
+    if (this.currentTopicIndex > 0) {
+      var prevIndex = this.currentTopicIndex - 1
+      var prevContainer = this.topicContainers[prevIndex]
+      var prevSteps = prevContainer.replay.steps()
+      if (prevSteps.length > 0) {
+        this.currentTopicIndex = prevIndex
+        return this.go(prevSteps[prevSteps.length - 1].id)
+      }
+    }
+
+    return null
   }
 
   KnowledgeRunner.prototype.scrollTo = function (topicId) {
@@ -201,6 +289,8 @@
     this.scroll = null
     this.resizeHandler = null
     this._topicIndex = null
+    this._linearSteps = null
+    this._linearIndex = -1
     this.revealedCount = 0
     this.currentTopicIndex = -1
   }

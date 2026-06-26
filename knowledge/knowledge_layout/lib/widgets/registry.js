@@ -16,7 +16,12 @@
     el.className = 'lf-block lf-block-' + (block.type || 'unknown')
     el.setAttribute('data-step-id', block.__stepId)
     el.setAttribute('data-block-type', block.type || 'unknown')
-    if (runtime && runtime.isCurrentStep && !runtime.instant) el.classList.add('lf-enter')
+    if (runtime && runtime.isCurrentStep && !runtime.instant) {
+      el.classList.add('lf-enter')
+      // Staggered entrance: 100ms delay per block within the step
+      var delay = (block.__localIndex || 0) * 100
+      el.style.animationDelay = delay + 'ms'
+    }
     return el
   }
 

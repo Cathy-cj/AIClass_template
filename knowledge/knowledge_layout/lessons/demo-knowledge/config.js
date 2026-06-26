@@ -42,8 +42,7 @@ var DEMO_KNOWLEDGE_CONFIG = {
           id: 2,
           figure: { state: 'circle-radius', params: { label: 'r' } },
           push: [
-            { type: 'text', lines: ['圆心决定圆的位置，半径决定圆的大小。'] },
-            { type: 'text', lines: ['圆心通常用大写字母 O 表示，半径用小写字母 r 表示。'] },
+            { type: 'text', lines: ['这个定点叫做圆心（用 O 表示），定长叫做半径（用 r 表示）。'] },
             { type: 'oral', badge: '想一想', question: '为什么车轮要做成圆形？' }
           ]
         },
@@ -51,8 +50,7 @@ var DEMO_KNOWLEDGE_CONFIG = {
           id: 3,
           figure: { state: 'circle-diameter' },
           push: [
-            { type: 'text', lines: ['经过圆心且两端都在圆上的线段叫做直径。'] },
-            { type: 'text', lines: ['直径通常用小写字母 d 表示。'] },
+            { type: 'text', lines: ['经过圆心且两端都在圆上的线段叫做直径（用 d 表示）。'] },
             { type: 'chain', nodes: ['半径 r', '直径 d = 2r'], prompt: '直径和半径有什么关系？' }
           ]
         }
@@ -100,23 +98,15 @@ var DEMO_KNOWLEDGE_CONFIG = {
           figure: { state: 'radius-equal' },
           push: [
             { type: 'heading', text: '圆的基本性质' },
-            { type: 'text', lines: ['在同一个圆中，所有的半径都相等。'] },
-            { type: 'text', lines: ['在同一个圆中，所有的直径都相等。'] }
+            { type: 'text', lines: ['在同一个圆中，所有的半径都相等，所有的直径也都相等。'] }
           ]
         },
         {
           id: 2,
           figure: { state: 'radius-equal' },
           push: [
-            { type: 'text', lines: ['直径是圆中最长的线段。'] },
-            { type: 'text', lines: ['半径有无数条，直径也有无数条。'] }
-          ]
-        },
-        {
-          id: 3,
-          push: [
-            { type: 'readList', kind: 'known', items: ['同一个圆中，半径都相等', '同一个圆中，直径都相等', '直径是最长的弦'] },
-            { type: 'readList', kind: 'ask', items: ['半径和直径的关系：d = 2r', '直径和半径的关系：r = d ÷ 2'] }
+            { type: 'text', lines: ['直径是圆中最长的线段，且半径和直径都有无数条。'] },
+            { type: 'readList', kind: 'known', items: ['半径都相等', '直径都相等', '直径是最长的弦'] }
           ]
         }
       ]
